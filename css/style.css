@@ -1,0 +1,54 @@
+/* Style for main div */
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	/* color style: http://paletton.com/#uid=42P0u0kllllaFw0g0qFqFg0w0aF */
+	background-color: #B4E0B4;
+}
+
+@font-face{ 
+	font-family: 'Geometria';
+	src: url('../font/geometria-light-webfont.woff') format('woff')
+}
+
+h1 {
+	font-family: 'Geometria', Arial, sans-serif;
+	font-size: 6em;
+}
+h2, h3, h4, h5, h6 {
+	font-family: 'Geometria', Arial, sans-serif;
+}
+
+.main-div {
+	text-align: center;
+	background-color: #FCFCFC;
+	margin-top: 6em;
+	box-shadow: 4px 4px 1px #58AC58;
+}
+
+
+
+.main-form {
+	text-align: left;
+}
+
+.price-btn {
+	min-width: 20%;
+}
+
+.btn-price-group {
+	min-width: 100% !important;
+}
+
+.submit-btn {
+	text-align: center;
+}
+
+.btn-submit {
+	margin-top: 3.5em;
+}
+
+
