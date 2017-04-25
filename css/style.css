@@ -25,8 +25,9 @@ h2, h3, h4, h5, h6 {
 .main-div {
 	text-align: center;
 	background-color: #FCFCFC;
-	margin-top: 6em;
+	margin: 6em 0;
 	box-shadow: 4px 4px 1px #58AC58;
+	
 }
 
 
@@ -52,3 +53,30 @@ h2, h3, h4, h5, h6 {
 }
 
 
+
+
+
+/* Style for restaurant listing  */
+.restaurant-div {
+	margin: 1.25em 0;
+	text-align: left;
+	background-color: #F2F2F2;
+	box-shadow: 4px 4px 1px #AAAAAA;
+}
+
+.restaurant-div:hover {
+	background-color: #EAEAEA;
+	box-shadow: 4px 4px 1px #A5A5A5;
+}
+
+.restaurant-img {
+	object-fit: cover;
+	width: 100%;
+	height: 15em;
+	padding: 0.5em;
+	border-radius: 5px;
+}
+
+.jq-ry-container {
+	margin-left: 0 !important;
+}

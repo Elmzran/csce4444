@@ -87,9 +87,36 @@ $(document).ready(function() {
 			// Make the official main request!
 			var placeService = new google.maps.places.PlacesService(map);
 			placeService.textSearch(request, function(data) {
+				console.log(data);
 				$(".main-div").empty();
-				$(".main-div").text(JSON.stringify(data));
-			});
+				$(data).each(function(index, data) {
+
+				// Create main restaurant div
+				var div = $('<div class="restaurant-div row">').appendTo(".main-div");
+				
+				// Append left sub and right sub div
+				var divLeft = $('<div class="left-restaurant-subdiv col-xs-6">').appendTo(div);
+				var divRight = $('<div class="right-restaurant-subdiv col-xs-6">').appendTo(div); 
+
+					
+				    divLeft.append(
+				        $(document.createElement('h3')).text(data.name)
+				    );
+				    divLeft.append(
+				    	//$(document.createElement('p')).text(data.rating)
+					$(document.createElement('div')).rateYo({rating: data.rating, readOnly: true})
+				    );
+					
+			 	    divLeft.append(
+				        $(document.createElement('h4')).text("$".repeat(data.price_level))
+				    );
+
+					var img = data.photos[0].getUrl({'maxWidth': 500, 'maxHeight': 500})
+					divRight.append("<img class='restaurant-img' src='" + img +"'/>");
+
+						div.attr("place", data.place_id);
+				});
+			});	
 		});
 	});
 });
