@@ -78,5 +78,10 @@ h2, h3, h4, h5, h6 {
 }
 
 .jq-ry-container {
-	margin-left: 0 !important;
+	padding-left: 0 !important;
+}
+
+.price {
+	color: lime;
+	font-weight: 800;
 }

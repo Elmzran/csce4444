@@ -1,4 +1,4 @@
-/*
+/*/*
  * TEMPORARY CODE FOR PROTOTYPE
  * 
  * The full version of this application will use Angular 2. But for
@@ -102,21 +102,41 @@ $(document).ready(function() {
 				    divLeft.append(
 				        $(document.createElement('h3')).text(data.name)
 				    );
+					divLeft.append(
+				        $(document.createElement('h4')).text("Address")
+				    );
+						divLeft.append(
+				        $(document.createElement('p')).text(data.formatted_address.replace(", United States", ""))
+				    );
+					divLeft.append(
+				        $(document.createElement('h4')).text("Rating")
+				    );
 				    divLeft.append(
-				    	//$(document.createElement('p')).text(data.rating)
 					$(document.createElement('div')).rateYo({rating: data.rating, readOnly: true})
 				    );
-					
-			 	    divLeft.append(
-				        $(document.createElement('h4')).text("$".repeat(data.price_level))
+					divLeft.append(
+				        $(document.createElement('h4')).text("Price")
 				    );
+			 	    divLeft.append(
+				        $(document.createElement('h4')).text("$".repeat(data.price_level)).css("color", "#42f48c").css("font-weight", 800)
+				    );
+						
+					// Check to make sure a photo exists
+					if (data.photos != undefined) {
+						var img = data.photos[0].getUrl({'maxWidth': 500, 'maxHeight': 500})
+						divRight.append("<img class='restaurant-img' src='" + img +"'/>");
+					}
+					
 
-					var img = data.photos[0].getUrl({'maxWidth': 500, 'maxHeight': 500})
-					divRight.append("<img class='restaurant-img' src='" + img +"'/>");
-
-						div.attr("place", data.place_id);
+					div.attr("place", data.place_id);
 				});
 			});	
+			
+			// Function to click on a location
+			$(document).on("click", ".restaurant-div", function() {
+				// $(this).attr("place") contains the placeID needed for the details request
+				console.log($(this).attr("place"));
+			});
 		});
 	});
 });
