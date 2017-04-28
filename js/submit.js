@@ -112,7 +112,7 @@ $(document).ready(function() {
 				        $(document.createElement('h4')).text("Rating")
 				    );
 				    divLeft.append(
-					$(document.createElement('div')).rateYo({rating: data.rating, readOnly: true})
+						$(document.createElement('div')).rateYo({rating: data.rating, readOnly: true})
 				    );
 					divLeft.append(
 				        $(document.createElement('h4')).text("Price")
@@ -132,10 +132,18 @@ $(document).ready(function() {
 				});
 			});	
 			
+			var enlarge = false;
 			// Function to click on a location
 			$(document).on("click", ".restaurant-div", function() {
 				// $(this).attr("place") contains the placeID needed for the details request
+				// On a restaurant 1st click, the selection will expand
+				// On a restaurant 2nd click, the selection will shrink back to its original size
+				$(this).stop(true, false).animate({
+					width: enlarge ? '100%' : '160%',
+					height: enlarge ? '100%' : 600,
+				}, 200);
 				console.log($(this).attr("place"));
+				enlarge = !enlarge;
 			});
 		});
 	});
