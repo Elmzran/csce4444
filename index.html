@@ -29,15 +29,16 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
 	
+		<!-- Routing JS Code -->
+		<script src="js/routing.js"></script>
+	
 		<!-- API Query JS Code -->
 		<script src="js/submit.js"></script>
 	</head>
 	<body>
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-2"></div>
 				
-				<div class="col-xs-8 main-div">
+				
+				<div class="main-div">
 					<h1>Where to eat?</h1>
 					
 					<div class="container-fluid form-block">
@@ -83,14 +84,12 @@
 					
 				</div>
 				
-				<div class="col-xs-2">
+				
 					<!-- In order to use the Google Maps API,
 						 the API requires a location for a map. But, since
 						 this web application does not need to render the app,
 						 we're simply using this div as the placeholder. -->
 					<div id="map" style="display: none;"></div>
 				</div>
-			</div>
-		</div>
 	</body>
 </html>

@@ -15,6 +15,7 @@ $(document).ready(function() {
 	
 	// Wait for submit
 	$(".btn-submit").on("click", function() {
+		
 		// Get the user inputted address for geocoding to LatLng
 		var userAddress = $("input[name=address]").val();
 		
@@ -88,7 +89,7 @@ $(document).ready(function() {
 			var placeService = new google.maps.places.PlacesService(map);
 			placeService.textSearch(request, function(data) {
 				console.log(data);
-				$(".main-div").empty();
+				$(".main-div").html("");
 				$(data).each(function(index, data) {
 
 				// Create main restaurant div
@@ -131,20 +132,58 @@ $(document).ready(function() {
 					div.attr("place", data.place_id);
 				});
 			});	
-			
-			var enlarge = false;
-			// Function to click on a location
-			$(document).on("click", ".restaurant-div", function() {
-				// $(this).attr("place") contains the placeID needed for the details request
-				// On a restaurant 1st click, the selection will expand
-				// On a restaurant 2nd click, the selection will shrink back to its original size
-				$(this).stop(true, false).animate({
-					width: enlarge ? '100%' : '160%',
-					height: enlarge ? '100%' : 600,
-				}, 200);
-				console.log($(this).attr("place"));
-				enlarge = !enlarge;
-			});
 		});
 	});
+	
+	// Function to click on a location
+	$(document).on("click", ".restaurant-div", function() {
+		// Format place details request object with the place attribute	
+		var request = {placeId: $(this).attr("place")};
+		var myDiv = $(this);
+		
+		
+		// Make place details request
+		if (myDiv.data("clicked") != true) {
+			var placeService = new google.maps.places.PlacesService(map);
+			placeService.getDetails(request, function(place, status) {
+				
+				console.log(place);
+				
+				myDiv.data("clicked", true);
+				var leftDiv = myDiv.find(".left-restaurant-subdiv");
+				var rightDiv = myDiv.find(".right-restaurant-subdiv");
+				
+				// Append navigation button
+				$('<h3 class="nav-header">Navigate</h3>').appendTo(rightDiv);
+				$('<button class="nav-button-wrapper"><a target="_blank" href="http://maps.google.com/?daddr=' + place.formatted_address.replace(" ", "+") + '"><img src="../img/car.png" /></a></button>').appendTo(rightDiv);
+				
+				// Append hours
+				$('<h4>Hours</h4>').appendTo(leftDiv);
+				for (i = 0; i < place.opening_hours.weekday_text.length; ++i)
+				{
+					$('<p>' + place.opening_hours.weekday_text[i] + '</p>').appendTo(leftDiv);
+				}
+				
+				// Append phone number
+				if (place.international_phone_number != undefined) {
+					$('<h4>Phone Number</h4>').appendTo(rightDiv);
+					$('<a href="tel:' + place.international_phone_number.replace(" ", "").replace("+", "").replace("-", "") + '">' + place.formatted_phone_number +'</a>').appendTo(rightDiv);
+				}
+				
+				// Append website
+				if (place.website != undefined) {
+					$('<h4>Website</h4>').appendTo(rightDiv);
+					$('<a target="_blank" href="' + place.website + '">' + place.website +'</a>').appendTo(rightDiv);
+				}
+			});
+		}
+	});
+	
+	// Basic Routing functionality
+	(function() {	
+		var initialLoad = 1, homehtml;
+		$.router.add("/", function(data) {
+			location.reload();
+		});
+	})();
 });

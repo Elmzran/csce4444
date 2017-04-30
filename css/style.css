@@ -17,6 +17,8 @@ body {
 h1 {
 	font-family: 'Geometria', Arial, sans-serif;
 	font-size: 6em;
+	margin: 0;
+	padding: 0.2em 0;
 }
 h2, h3, h4, h5, h6 {
 	font-family: 'Geometria', Arial, sans-serif;
@@ -25,11 +27,19 @@ h2, h3, h4, h5, h6 {
 .main-div {
 	text-align: center;
 	background-color: #FCFCFC;
-	margin: 6em 0;
+	margin: 6em auto;
+	padding: 1.25em 0;
 	box-shadow: 4px 4px 1px #58AC58;
-	
+	width: 768px;
+	max-width: 100%;
 }
 
+@media (max-width: 768px) {
+	.main-div {
+		margin: 0;
+		min-height: 100vh;
+	}
+}
 
 
 .main-form {
@@ -58,7 +68,8 @@ h2, h3, h4, h5, h6 {
 
 /* Style for restaurant listing  */
 .restaurant-div {
-	margin: 1.25em 0;
+	margin: 0 1.25em 1.25em;
+	padding-bottom: 2.5em;
 	text-align: left;
 	background-color: #F2F2F2;
 	box-shadow: 4px 4px 1px #AAAAAA;
@@ -84,4 +95,20 @@ h2, h3, h4, h5, h6 {
 .price {
 	color: lime;
 	font-weight: 800;
+}
+
+.right-restaurant-subdiv {
+	text-align: center;
+}
+
+.nav-button-wrapper {
+	display: block;
+	background: #98D46E;
+	border-radius: 40%;
+	margin: auto;
+	border: none;
+}
+
+.nav-button-wrapper:hover {
+	background: #BBF294;
 }
