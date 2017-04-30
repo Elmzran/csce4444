@@ -143,6 +143,12 @@ $(document).ready(function() {
 					height: enlarge ? '100%' : 600,
 				}, 200);
 				console.log($(this).attr("place"));
+				if(enlarge === false){
+					//code to pull extra restaurant info
+				}
+				else{
+					//code to remove extra restaurant info
+				}
 				enlarge = !enlarge;
 			});
 		});
