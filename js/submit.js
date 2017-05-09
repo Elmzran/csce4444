@@ -1,9 +1,7 @@
 /*/*
- * TEMPORARY CODE FOR PROTOTYPE
+ * CODE FOR "Where to Eat?"
  * 
- * The full version of this application will use Angular 2. But for
- * the purposes of deadlines and time constraints, the prototype will
- * utilize jQuery. 
+ * CODE BY Jonathan Roosa, Brennan Schamberger, Amir Kessler, Sadman Ahmed, and Jay Baek
  * 
  * */
  
@@ -15,6 +13,12 @@ $(document).ready(function() {
 	
 	// Wait for submit
 	$(".btn-submit").on("click", function() {
+		
+		// Basic Routing Functionality
+		$.router.go("/");
+		$.router.add("/", function(data) {
+			location.reload();
+		});
 		
 		// Get the user inputted address for geocoding to LatLng
 		var userAddress = $("input[name=address]").val();
@@ -89,47 +93,100 @@ $(document).ready(function() {
 			var placeService = new google.maps.places.PlacesService(map);
 			placeService.textSearch(request, function(data) {
 				console.log(data);
-				$(".main-div").html("");
-				$(data).each(function(index, data) {
-
-				// Create main restaurant div
-				var div = $('<div class="restaurant-div row">').appendTo(".main-div");
+				$(".main-div").html('<div style="margin: 2em;"><div class="row"> \
+							<div class="col-md-12"> \
+								<div class="form-group"> \
+									<label>Sort By:</label> \
+									<select class="form-control" id="sort"> \
+										<option value="1">Name (a-z)</option> \
+										<option value="2">Name (z-a)</option> \
+										<option value="3">Price (low-high)</option> \
+										<option value="4">Price (high-low)</option> \
+										<option value="5">Rating (low-high)</option> \
+										<option value="6">Rating (high-low)</option> \
+									</select> \
+								</div> \
+							</div> \
+							<div class="col-md-12"> \
+								<button type="button" id="sort-submit" class="btn btn-secondary btn-lg">Sort</button> \
+							</div> \
+						</div></div><div class="main-listing-div"></div>');
+				display_listing(data);
 				
-				// Append left sub and right sub div
-				var divLeft = $('<div class="left-restaurant-subdiv col-xs-6">').appendTo(div);
-				var divRight = $('<div class="right-restaurant-subdiv col-xs-6">').appendTo(div); 
-
+				// Function for sorting listing
+				$(document).on("click", "#sort-submit", function() {
+					// Get the value of the option from the dropdown
+					var option = $('select[id=sort]').val();
 					
-				    divLeft.append(
-				        $(document.createElement('h3')).text(data.name)
-				    );
-					divLeft.append(
-				        $(document.createElement('h4')).text("Address")
-				    );
-						divLeft.append(
-				        $(document.createElement('p')).text(data.formatted_address.replace(", United States", ""))
-				    );
-					divLeft.append(
-				        $(document.createElement('h4')).text("Rating")
-				    );
-				    divLeft.append(
-						$(document.createElement('div')).rateYo({rating: data.rating, readOnly: true})
-				    );
-					divLeft.append(
-				        $(document.createElement('h4')).text("Price")
-				    );
-			 	    divLeft.append(
-				        $(document.createElement('h4')).text("$".repeat(data.price_level)).css("color", "#42f48c").css("font-weight", 800)
-				    );
-						
-					// Check to make sure a photo exists
-					if (data.photos != undefined) {
-						var img = data.photos[0].getUrl({'maxWidth': 500, 'maxHeight': 500})
-						divRight.append("<img class='restaurant-img' src='" + img +"'/>");
+					// In the sort select dropdown, odd options are ascending while even options are descending
+					// so, choose proper ordering via trinary operator
+					var ascending = option % 2 ? true : false;
+					
+					// Bubble sort, because native JS sorting wasn't working
+					for (var i = 0; i < data.length; ++i) {
+						for (var j = 0; j < data.length - 1; ++j) {
+							// Name
+							if (option == 1 || option == 2) {
+								// Ascending
+								if (ascending == true) {
+									if (data[j].name > data[j + 1].name) {
+										var temp = data[j];
+										data[j] = data[j + 1];
+										data[j + 1] = temp;
+									}
+								}
+								// Descending
+								else if (ascending == false) {
+									if (data[j].name < data[j + 1].name) {
+										var temp = data[j];
+										data[j] = data[j + 1];
+										data[j + 1] = temp;
+									}
+								}
+							}
+							// Price Level
+							if (option == 3 || option == 4) {
+								// Ascending
+								if (ascending == true) {
+									if (data[j].price_level > data[j + 1].price_level) {
+										var temp = data[j];
+										data[j] = data[j + 1];
+										data[j + 1] = temp;
+									}
+								}
+								// Descending
+								else if (ascending == false) {
+									if (data[j].price_level < data[j + 1].price_level) {
+										var temp = data[j];
+										data[j] = data[j + 1];
+										data[j + 1] = temp;
+									}
+								}
+							}
+							// Rating
+							if (option == 5 || option == 6) {
+								// Ascending
+								if (ascending == true) {
+									if (data[j].rating > data[j + 1].rating) {
+										var temp = data[j];
+										data[j] = data[j + 1];
+										data[j + 1] = temp;
+									}
+								}
+								// Descending
+								else if (ascending == false) {
+									if (data[j].rating < data[j + 1].rating) {
+										var temp = data[j];
+										data[j] = data[j + 1];
+										data[j + 1] = temp;
+									}
+								}
+							}
+						}
 					}
-					
-
-					div.attr("place", data.place_id);
+					console.log(data);
+					$(".main-listing-div").html("");
+					display_listing(data);
 				});
 			});	
 		});
@@ -179,11 +236,48 @@ $(document).ready(function() {
 		}
 	});
 	
-	// Basic Routing functionality
-	(function() {	
-		var initialLoad = 1, homehtml;
-		$.router.add("/", function(data) {
-			location.reload();
+	// Function for displaying restaurants
+	function display_listing(data) {
+		$(data).each(function(index, data) {
+
+		// Create main restaurant div
+		var div = $('<div class="restaurant-div row">').appendTo(".main-listing-div");
+		
+		// Append left sub and right sub div
+		var divLeft = $('<div class="left-restaurant-subdiv col-xs-6">').appendTo(div);
+		var divRight = $('<div class="right-restaurant-subdiv col-xs-6">').appendTo(div); 
+
+			
+			divLeft.append(
+				$(document.createElement('h3')).text(data.name)
+			);
+			divLeft.append(
+				$(document.createElement('h4')).text("Address")
+			);
+				divLeft.append(
+				$(document.createElement('p')).text(data.formatted_address.replace(", United States", ""))
+			);
+			divLeft.append(
+				$(document.createElement('h4')).text("Rating")
+			);
+			divLeft.append(
+				$(document.createElement('div')).rateYo({rating: data.rating, readOnly: true})
+			);
+			divLeft.append(
+				$(document.createElement('h4')).text("Price")
+			);
+			divLeft.append(
+				$(document.createElement('h4')).text("$".repeat(data.price_level)).css("color", "#42f48c").css("font-weight", 800)
+			);
+				
+			// Check to make sure a photo exists
+			if (data.photos != undefined) {
+				var img = data.photos[0].getUrl({'maxWidth': 500, 'maxHeight': 500})
+				divRight.append("<img class='restaurant-img' src='" + img +"'/>");
+			}
+			
+
+			div.attr("place", data.place_id);
 		});
-	})();
+	}
 });
